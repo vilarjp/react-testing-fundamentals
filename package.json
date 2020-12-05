@@ -1,0 +1,43 @@
+{
+  "name": "curso-javascript-testes-modulo-3",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "test": "jest",
+    "test:unit": "jest --config=jest-unit.config.js",
+    "test:unit:watch": "jest --config=jest-unit.config.js --watchAll",
+    "test:integration": "jest --config=jest-integration.config.js",
+    "test:integration:watch": "jest --config=jest-integration.config.js --watchAll",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@tailwindcss/ui": "^0.6.2",
+    "axios": "^0.21.0",
+    "immer": "^8.0.0",
+    "next": "10.0.0",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "tailwindcss": "^1.7.4",
+    "zustand": "^3.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^7.28.1",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
+    "@testing-library/react-hooks": "^3.4.2",
+    "@testing-library/user-event": "^12.2.2",
+    "@types/jest": "^26.0.15",
+    "babel-jest": "^26.6.3",
+    "faker": "^5.1.0",
+    "jest": "^26.6.3",
+    "jest-dom": "^4.0.0",
+    "miragejs": "^0.1.41",
+    "postcss-flexbugs-fixes": "4.2.1",
+    "postcss-preset-env": "^6.7.0",
+    "react-test-renderer": "^17.0.1"
+  }
+}
