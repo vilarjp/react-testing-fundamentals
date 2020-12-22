@@ -7,6 +7,8 @@ describe('Cart Store', () => {
   let result;
   let add;
   let toggle;
+  let increase;
+  let decrease;
   let remove;
   let removeAll;
 
@@ -15,6 +17,8 @@ describe('Cart Store', () => {
     result = renderHook(() => useCartStore()).result;
     add = result.current.actions.add;
     toggle = result.current.actions.toggle;
+    increase = result.current.actions.increase;
+    decrease = result.current.actions.decrease;
     remove = result.current.actions.remove;
     removeAll = result.current.actions.removeAll;
   });
@@ -28,7 +32,7 @@ describe('Cart Store', () => {
     expect(result.current.state.open).toBe(false);
   });
 
-  it('should return an empty for products on initial state', () => {
+  it('should return an empty list for products on initial state', () => {
     expect(Array.isArray(result.current.state.products)).toBe(true);
     expect(result.current.state.products).toHaveLength(0);
   });
@@ -51,6 +55,50 @@ describe('Cart Store', () => {
     act(() => add(product));
 
     expect(result.current.state.products).toHaveLength(1);
+  });
+
+  it('should assign 1 as initial quantity on product add()', () => {
+    const product = server.create('product');
+
+    act(() => {
+      add(product);
+    });
+
+    expect(result.current.state.products[0].quantity).toBe(1);
+  });
+
+  it('should increase quantity', () => {
+    const product = server.create('product');
+
+    act(() => {
+      add(product);
+      increase(product);
+    });
+
+    expect(result.current.state.products[0].quantity).toBe(2);
+  });
+
+  it('should decrease quantity', () => {
+    const product = server.create('product');
+
+    act(() => {
+      add(product);
+      decrease(product);
+    });
+
+    expect(result.current.state.products[0].quantity).toBe(0);
+  });
+
+  it('should NOT decrease bellow 0', () => {
+    const product = server.create('product');
+
+    act(() => {
+      add(product);
+      decrease(product);
+      decrease(product);
+    });
+
+    expect(result.current.state.products[0].quantity).toBe(0);
   });
 
   it('should toggle open state', () => {
@@ -79,6 +127,23 @@ describe('Cart Store', () => {
 
     expect(result.current.state.products).toHaveLength(1);
     expect(result.current.state.products[0]).toStrictEqual(product2);
+  });
+
+  it('should not change products in the cart if provided product is not in the array', () => {
+    const [product1, product2, product3] = server.createList('product', 3);
+
+    act(() => {
+      add(product1);
+      add(product2);
+    });
+
+    expect(result.current.state.products).toHaveLength(2);
+
+    act(() => {
+      remove(product3);
+    });
+
+    expect(result.current.state.products).toHaveLength(2);
   });
 
   it('should clear cart', () => {

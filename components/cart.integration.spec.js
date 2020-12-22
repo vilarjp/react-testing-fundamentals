@@ -36,14 +36,6 @@ describe('Cart', () => {
     expect(screen.getByTestId('cart')).toHaveClass('hidden');
   });
 
-  it('should not add css class "hidden" in the component', () => {
-    act(() => toggle());
-
-    render(<Cart />);
-
-    expect(screen.getByTestId('cart')).not.toHaveClass('hidden');
-  });
-
   it('should call ->store.toggle() when toggle-button is clicked', () => {
     render(<Cart />);
 
@@ -66,5 +58,31 @@ describe('Cart', () => {
     render(<Cart />);
 
     expect(screen.getAllByTestId('cart-item')).toHaveLength(2);
+  });
+
+  it('should remove all products when clear cart button is clicked', () => {
+    const products = server.createList('product', 2);
+
+    act(() => {
+      for (const product of products) {
+        add(product);
+      }
+    });
+
+    render(<Cart />);
+
+    expect(screen.getAllByTestId('cart-item')).toHaveLength(2);
+
+    const button = screen.getByRole('button', { name: /Clear cart/i });
+
+    act(() => userEvent.click(button));
+
+    expect(screen.queryAllByTestId('cart-item')).toHaveLength(0);
+  });
+
+  it('should not display clear cart button if no products are in the cart', () => {
+    render(<Cart />);
+
+    expect(screen.queryByRole('button', { name: /Clear cart/i })).not.toBeInTheDocument();
   });
 });
